@@ -3,10 +3,14 @@ package stellarburgers;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
+import io.restassured.RestAssured;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 
 import static org.junit.Assert.*;
 
@@ -27,11 +31,14 @@ public class RegisterTest extends TestDataAndConstants {
         userApiMethods = new UserApiMethods();
         registerPage.openUrl();
         registerPage.implicitWait();
+
+        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter()); // логирование
     }
 
     @After
     public void tearDown() {
         driver.quit();
+        RestAssured.reset();
     }
 
     @Step("Очистка данных")
@@ -51,7 +58,6 @@ public class RegisterTest extends TestDataAndConstants {
         loginPage.explicitWaitToVisibleHeaderLoginPage();
         assertTrue(loginPage.atPage());
         Allure.step("Пользователь успешно зарегистрирован");
-
         cleanUp();
     }
 
@@ -65,7 +71,6 @@ public class RegisterTest extends TestDataAndConstants {
         loginPage.explicitWaitToVisibleHeaderLoginPage();
         assertTrue(loginPage.atPage());
         Allure.step("Пользователь успешно зарегистрирован");
-
         cleanUp();
     }
 
